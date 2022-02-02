@@ -9,5 +9,4 @@ public class SamsungTestApplication {
 	public static void main(String[] args) {
 		SpringApplication.run(SamsungTestApplication.class, args);
 	}
-
 }

@@ -4,10 +4,10 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 @RestController
-public class MyController {
+public class BaseController {
     
     @GetMapping("/")
     public String index() {
-        return "Hello World, Finally!";
+        return "Welcome to REST API app build with Spring, Maven, and MongoDB!";
     }
 }
