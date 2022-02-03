@@ -1,8 +1,10 @@
 package com.zaydhisyam.samsungtest;
 
 import java.util.List;
+import java.util.Optional;
 
 import com.zaydhisyam.samsungtest.Model.Barang;
+import com.zaydhisyam.samsungtest.Model.Status;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
@@ -13,50 +15,64 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 @RestController
-@RequestMapping("api/v1")
+@RequestMapping("api/barang")
 public class BarangController {
     
     @Autowired
-    private BarangServices services;
+    private BarangRepository repository;
 
-    @GetMapping(value = "/")
+    @GetMapping(value = "/list")
     public List<Barang> fetchAllBarang() {
-        return services.fetchAllBarang();
+        return repository.findAll();
     }
 
-    @GetMapping(value = "akun-penjual")
-    public List<Barang> findByAkunPenjual(@RequestParam("v") String namaAkunPenjual) {
-        return services.findByAkunPenjual(namaAkunPenjual);
+    @GetMapping(value = "/akun-penjual/{value}")
+    public List<Barang> findByAkunPenjual(@PathVariable("value") String namaAkunPenjual) {
+        return repository.findByNamaAkunPenjual(namaAkunPenjual);
     }
 
-    @GetMapping(value = "alamat-kirim")
-    public List<Barang> findByAlamatKirim(@RequestParam("v") String alamatKirim) {
-        return services.findByAlamatKirim(alamatKirim);
+    @GetMapping(value = "/alamat-kirim/{value}")
+    public List<Barang> findByAlamatKirim(@PathVariable("value") String alamatKirim) {
+        return repository.findByAlamatKirim(alamatKirim);
     }
 
-    @GetMapping(value = "is-online")
-    public List<Barang> findByStatus(@RequestParam("v") String isOnline) {
-        return services.findByStatus(isOnline);
+    @GetMapping(value = "/status/{value}")
+    public List<Barang> findByStatus(@PathVariable("value") String isOnline) {
+        Status _status;
+        if (isOnline.equals("Online")) _status = Status.Online;
+        else _status = Status.Offline;
+
+        return repository.findByStatus(_status);
+    }
+
+    @GetMapping(value = "/{id}")
+    public Barang findById(@PathVariable String id) {
+        Barang barang;
+        Optional<Barang> result = repository.findById(id);
+
+        if (result.isEmpty()) barang = new Barang();
+        else barang = result.get();
+
+        return barang;
     }
 
     @PostMapping(value = "/")
     public Barang createNewBarang(@RequestBody Barang barang) {
-        return services.createOrUpdateBarang(barang);
+        return repository.save(barang);
     }
 
     @PutMapping(value = "/{id}")
     public Barang updateBarang(@PathVariable String id, @RequestBody Barang barang) {
         barang.setId(id);
-        return services.createOrUpdateBarang(barang);
+        return repository.save(barang);
     }
 
     @DeleteMapping(value = "/{id}")
     public ResponseEntity<String> deleteBarangById(@PathVariable String id) {
-        services.deleteBarangById(id);
+        repository.deleteById(id);
         return ResponseEntity.ok(id);
     }
 }
