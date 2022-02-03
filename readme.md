@@ -1,2 +1,2 @@
 # Spring Mongo
-REST API app build with Spring, Mongo, and Maven
+REST API app build with Spring, MongoDB Atlas, and Maven
