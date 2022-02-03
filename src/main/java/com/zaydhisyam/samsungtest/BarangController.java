@@ -1,5 +1,6 @@
 package com.zaydhisyam.samsungtest;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 
@@ -49,14 +50,13 @@ public class BarangController {
     }
 
     @GetMapping(value = "/{id}")
-    public Barang findById(@PathVariable String id) {
-        Barang barang;
-        Optional<Barang> result = repository.findById(id);
+    public List<Barang> findById(@PathVariable String id) {
+        List<Barang> result = new ArrayList<>();
 
-        if (result.isEmpty()) barang = new Barang();
-        else barang = result.get();
+        Barang barang = repository.findById(id).orElse(null);
+        if (barang != null) result.add(barang);
 
-        return barang;
+        return result;
     }
 
     @PostMapping(value = "/")
