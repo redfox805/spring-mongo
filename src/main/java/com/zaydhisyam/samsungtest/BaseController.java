@@ -8,6 +8,6 @@ public class BaseController {
     
     @GetMapping("/")
     public String index() {
-        return "Welcome to REST API app build with Spring, Maven, and MongoDB!";
+        return "Welcome to REST API app build with Spring, MongoDB Atlas, and Maven!";
     }
 }
